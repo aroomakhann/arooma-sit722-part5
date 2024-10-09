@@ -1,22 +1,8 @@
-
-resource "azurerm_resource_group" "flixtube" {
-  name     = "${var.app_name}rg"
-  location = var.location
-}
-
-resource "azurerm_container_registry" "container_eight" {
-  name                = "${var.app_name}acr"
-  resource_group_name = azurerm_resource_group.flixtube.name
-  location            = var.location
-  sku                 = "Basic"
-  admin_enabled       = true
-}
-
 resource "azurerm_kubernetes_cluster" "cluster" {
-  name                = "${var.app_name}akscluster"
+  name                = "${var.app_name}-aks-cluster"
   location            = var.location
   resource_group_name = azurerm_resource_group.flixtube.name
-  dns_prefix          = "${var.app_name}dns"
+  dns_prefix          = "${var.app_name}-dns"
 
   default_node_pool {
     name       = "default"
@@ -27,6 +13,15 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   identity {
     type = "SystemAssigned"
   }
+
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+  }
+
+  tags = {
+    environment = "dev"
+  }
 }
 
 resource "azurerm_role_assignment" "role_assignment" {
@@ -35,4 +30,3 @@ resource "azurerm_role_assignment" "role_assignment" {
   scope                            = azurerm_container_registry.container_eight.id
   skip_service_principal_aad_check = true
 }
-
