@@ -9,6 +9,12 @@ terraform {
   required_version = ">= 1.5.6"
 }
 
+resource "azurerm_resource_group" "flixtube" {
+  name     = "${var.app_name}-rg"
+  location = var.location
+}
+
+
 provider "azurerm" {
   features {}
   skip_provider_registration = true
