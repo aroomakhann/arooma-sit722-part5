@@ -11,7 +11,7 @@ variable "kubernetes_version" {
 }
 
 variable "node_count" {
-  default = 2
+  default = 1
 }
 
 variable "subscription_id" {
