@@ -1,4 +1,4 @@
-name: CI-CD Pipeline for Book and Inventory Services 
+name: CI-CD Pipeline for Book and Inventory Services
 
 on:
   push: 
@@ -21,6 +21,12 @@ jobs:
 
       - name: Logging into Azure Container Registry
         run: echo ${{ secrets.REGISTRY_PW }} | docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.REGISTRY_UN }} --password-stdin
+
+      - name: Add Execute Permissions to Scripts
+        run: |
+          chmod +x ./scripts/build-image.sh
+          chmod +x ./scripts/push-image.sh
+          chmod +x ./scripts/deploy.sh
 
       - name: Building Our Docker Images
         run: ./scripts/build-image.sh
@@ -55,4 +61,3 @@ jobs:
           kubectl get pods --namespace=default
           kubectl get services --namespace=default
           kubectl get deployments --namespace=default
-
