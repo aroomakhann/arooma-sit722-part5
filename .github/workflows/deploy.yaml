@@ -45,9 +45,25 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Applying Our Terraform
+      - name: Initialising Our Terraform
         working-directory: ./scripts/terraform
         run: terraform init
+
+      - name: Applying Our Terraform
+        working-directory: ./scripts/terraform
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          run: terraform apply -auto-approve
+
+      - name: Verifying Successful Deployment
+        run: |
+          kubectl get pods --namespace=default
+          kubectl get services --namespace=default
+          kubectl get deployments --namespace=default
+
 
       - name: Verifying Successful Deployment
         run: kubectl config current-context
