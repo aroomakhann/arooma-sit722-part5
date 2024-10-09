@@ -1,0 +1,44 @@
+version: '3.9' 
+services:
+  book_catalog:
+    build:
+      context: ./book_catalog
+      dockerfile: Dockerfile
+    image: ${CONTAINER_REGISTRY}/bookcatalog:${VERSION}  
+    ports:
+      - "3001:80"  
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
+  inventory_management:
+    build:
+      context: ./inventory_management
+      dockerfile: Dockerfile
+    image: ${CONTAINER_REGISTRY}/inventorymanage:${VERSION}  
+    ports:
+      - "3002:80"  
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: task9d_user
+      POSTGRES_PASSWORD: BWr1yOXHAePNSipQyz17cHcsfSsWXn8m
+      POSTGRES_DB: task9d
+    ports:
+      - "5432:5432"
