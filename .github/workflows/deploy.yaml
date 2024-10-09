@@ -1,15 +1,15 @@
 name: CI-CD Pipeline for Book and Inventory Services
 
 on:
-  push: 
+  push:
     branches:
       - main
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     env:
       VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Logging into Azure Container Registry
+      - name: Logging into  Container Registry
         run: echo ${{ secrets.REGISTRY_PW }} | docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.REGISTRY_UN }} --password-stdin
 
       - name: Add Execute Permissions to Scripts
@@ -29,26 +29,28 @@ jobs:
           chmod +x ./scripts/deploy.sh
 
       - name: Building Our Docker Images
-        run: ./scripts/build-image.sh
+        run: bash ./scripts/build-image.sh
 
       - name: Pushing Our Docker Images
-        run: ./scripts/push-image.sh
+        run: bash ./scripts/push-image.sh
 
       - uses: tale/kubectl-action@v1
         with:
           base64-kube-config: ${{ secrets.KUBE_CONFIG }}
           kubectl-version: v1.24.2
 
-      - name: Deploying Microservices
-        run: ./scripts/deploy.sh
+      - name: Deploying Our Microservices
+        run: bash ./scripts/deploy.sh
 
-      - name: Starting up Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Initialising Terraform
+      - name: Initialising Our Terraform
+        working-directory: ./scripts/terraform
         run: terraform init
 
-      - name: Applying Terraform
+      - name: Applying Our Terraform
+        working-directory: ./scripts/terraform
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
