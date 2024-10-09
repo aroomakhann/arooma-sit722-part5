@@ -14,7 +14,7 @@ spec:
     spec:
       containers: 
       - name: bookcatalog
-        image: $CONTAINER_REGISTRY/bookcatalog:$VERSION
+        image: arooma123arc.azurecr.io/bookcatalog:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3001  
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: inventorymanage
-        image: $CONTAINER_REGISTRY/inventorymanage:$VERSION
+        image: arooma123arc.azurecr.io/inventorymanage:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3002  
