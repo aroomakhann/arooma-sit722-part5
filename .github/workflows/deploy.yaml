@@ -45,13 +45,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Initialising Our Terraform
-        working-directory: ./scripts/terraform
-        run: terraform init
-
       - name: Applying Our Terraform
         working-directory: ./scripts/terraform
-        run: terraform apply 
+        run: terraform init
 
       - name: Verifying Successful Deployment
         run: |
