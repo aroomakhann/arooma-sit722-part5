@@ -18,10 +18,6 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     network_plugin    = "azure"
     load_balancer_sku = "standard"
   }
-
-  tags = {
-    environment = "dev"
-  }
 }
 
 resource "azurerm_role_assignment" "role_assignment" {
