@@ -50,13 +50,4 @@ jobs:
         run: terraform init
 
       - name: Verifying Successful Deployment
-        run: |
-          kubectl get pods --namespace=default
-          kubectl get services --namespace=default
-          kubectl get deployments --namespace=default
-
-      - name: Verifying Successful Deployment
-        run: |
-          kubectl get pods --namespace=default
-          kubectl get services --namespace=default
-          kubectl get deployments --namespace=default
+        run: 
