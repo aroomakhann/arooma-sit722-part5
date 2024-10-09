@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster" "cluster" {
   name                = "${var.app_name}-aks-cluster"
   location            = var.location
-  resource_group_name = azurerm_resource_group.arooma123.name  # Correctly reference the resource group
+  resource_group_name = azurerm_resource_group.arooma123.name  
   dns_prefix          = "${var.app_name}-dns"
 
   default_node_pool {
