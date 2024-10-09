@@ -50,4 +50,4 @@ jobs:
         run: terraform init
 
       - name: Verifying Successful Deployment
-        run: 
+        run: kubectl config current-context
