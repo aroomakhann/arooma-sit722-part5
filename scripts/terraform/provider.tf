@@ -9,7 +9,7 @@ terraform {
   required_version = ">= 1.5.6"
 }
 
-resource "azurerm_resource_group" "flixtube" {
+resource "azurerm_resource_group" "arooma123" {
   name     = "${var.app_name}-rg"
   location = var.location
 }
