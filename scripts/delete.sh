@@ -1,4 +1,5 @@
-set -u  
+#!/bin/bash
+set -x
 
 : "$CONTAINER_REGISTRY"
 : "$VERSION"
