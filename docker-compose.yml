@@ -4,11 +4,11 @@ services:
     build:
       context: ./book_catalog
       dockerfile: Dockerfile
-    image: ${CONTAINER_REGISTRY}/bookcatalog:${VERSION}  
+    image: arooma123acr.azurecr.io/bookcatalog:v2
     ports:
       - "3001:80"  
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgresql://task9d_user:BWr1yOXHAePNSipQyz17cHcsfSsWXn8m@dpg-cs31k768ii6s738e3a3g-a.oregon-postgres.render.com/task9d
     depends_on:
       - postgres
     deploy:
@@ -21,11 +21,11 @@ services:
     build:
       context: ./inventory_management
       dockerfile: Dockerfile
-    image: ${CONTAINER_REGISTRY}/inventorymanage:${VERSION}  
+    image: arooma123acr.azurecr.io/inventorymanage:v2
     ports:
       - "3002:80"  
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgresql://task9d_user:BWr1yOXHAePNSipQyz17cHcsfSsWXn8m@dpg-cs31k768ii6s738e3a3g-a.oregon-postgres.render.com/task9d
     depends_on:
       - postgres
     deploy:

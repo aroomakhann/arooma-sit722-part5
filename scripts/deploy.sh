@@ -4,6 +4,6 @@ set -x
 : "$CONTAINER_REGISTRY"
 : "$VERSION"
 
-envsubst < ./scripts/kubernetes/deploy.yaml | kubectl apply -f -
+kubectl apply -f ./scripts/kubernetes/deploy.yaml
 
 echo "Deployment successful!"
