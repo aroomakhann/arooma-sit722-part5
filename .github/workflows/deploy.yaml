@@ -1,1 +1,58 @@
+name: CI-CD Pipeline for Book and Inventory Services 
+
+on:
+  push: 
+    branches:
+      - main
+  workflow_dispatch:  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    env:
+      VERSION: ${{ github.sha }}
+      CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Logging into Azure Container Registry
+        run: echo ${{ secrets.REGISTRY_PW }} | docker login ${{ secrets.CONTAINER_REGISTRY }} --username ${{ secrets.REGISTRY_UN }} --password-stdin
+
+      - name: Building Our Docker Images
+        run: ./scripts/build-image.sh
+
+      - name: Pushing Our Docker Images
+        run: ./scripts/push-image.sh
+
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+          kubectl-version: v1.24.2
+
+      - name: Deploying Microservices
+        run: ./scripts/deploy.sh
+
+      - name: Starting up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Initialising Terraform
+        run: terraform init
+
+      - name: Applying Terraform
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        run: terraform apply -auto-approve
+
+      - name: Verifying Successful Deployment
+        run: |
+          kubectl get pods --namespace=default
+          kubectl get services --namespace=default
+          kubectl get deployments --namespace=default
 
